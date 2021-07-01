@@ -1,0 +1,23 @@
+install.packages("ggplot2") 
+install.packages("caTools") 
+studentdata = read.csv('https://raw.githubusercontent.com/AdiPersonalWorks/Random/master/student_scores%20-%20student_scores.csv') 
+plot(studentdata$Hours,studentdata$Scores,xlab="Hours studied",ylab="Percentage score",col='#44a832')
+cor(studentdata$Hours,studentdata$Scores)
+library("caTools") 
+split = sample.split(studentdata$Hours, SplitRatio = 0.8)
+trainingset = subset(studentdata, split == TRUE) 
+testset = subset(studentdata, split == FALSE)
+model = lm(formula = Scores~Hours, data = trainingset)
+coef(model)
+ggplot(x=studentdata$Hours,y=studentdata$Scores) + geom_point(aes(x = trainingset$Hours, y =trainingset$Scores), colour = 'Blue') + geom_abline(aes(intercept=0.2370189,slope=10.2465692), colour = 'black') +
+
+ggtitle('Hours vs Scores (Training set)') + xlab('Hours') + ylab('Scores') 
+ypred = predict(model, newdata = testset) 
+ypred new_data=data.frame(Hours=c(9.25))
+predicted=predict(model,newdata=new_data)
+predicted
+ggplot() + geom_point(aes(x = trainingset$Hours, y = trainingset$Scores), colour = 'red') + geom_abline(aes(intercept=0.2370189,slope=10.2465692), colour = 'blue') +
+
+ggtitle('Hours vs Scores (Test set)') + xlab('Hours') + ylab('Scores') 
+rmse=sqrt(mean(predicted-studentdata$Scores)^2) 
+rmse
